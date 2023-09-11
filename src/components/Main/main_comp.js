@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Buttons from "../Buttons/buttons_comp";
+import Modal from "../Modal/modal_comp";
 import "./main_style.css";
 
 const Main = () => {
@@ -35,28 +36,12 @@ const Main = () => {
         onShowHighscore={handleShowHighscore}
         onSelectTheme={handleSelectTheme}
       />
-      {showRulesModal && (
-        <>
-          <div className="overlay" onClick={handleCloseModal}></div>
-          <div className="modal">
-            <button className="modal-close" onClick={handleCloseModal}>
-              &times;
-            </button>
-            Her kan du legge til reglene for spillet.
-          </div>
-        </>
-      )}
-      {showHighscoreModal && (
-        <>
-          <div className="overlay" onClick={handleCloseModal}></div>
-          <div className="modal">
-            <button className="modal-close" onClick={handleCloseModal}>
-              &times;
-            </button>
-            Her kan du vise highscore-listen.
-          </div>
-        </>
-      )}
+      <Modal isOpen={showRulesModal} onClose={handleCloseModal}>
+        Her kan du legge til reglene for spillet.
+      </Modal>
+      <Modal isOpen={showHighscoreModal} onClose={handleCloseModal}>
+        Her kan du vise highscore-listen.
+      </Modal>
     </main>
   );
 };
