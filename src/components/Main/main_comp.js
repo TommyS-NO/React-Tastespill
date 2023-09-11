@@ -17,9 +17,7 @@ const Main = () => {
     setShowHighscoreModal(true);
   };
 
-  const handleSelectTheme = () => {
-    // Her kan du legge til logikk for å velge tema og be brukeren om et brukernavn
-  };
+  const handleSelectTheme = () => {};
 
   const handleCloseModal = () => {
     setShowInstructionsModal(false);
