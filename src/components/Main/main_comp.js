@@ -26,7 +26,7 @@ const Main = () => {
 
   return (
     <main className="main-content">
-      <h2>Velkommen til Tastespill!</h2>
+      <h2>Velkommen til Høstens Tidsfordriv</h2>
       <p>
         Her kan du forbedre tastaturferdighetene dine samtidig som du lærer om
         ulike temaer.

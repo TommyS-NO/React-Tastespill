@@ -4,9 +4,17 @@ import "./buttons_style.css";
 const Buttons = ({ onShowRules, onShowHighscore, onSelectTheme }) => {
   return (
     <div className="buttons-container">
-      <button onClick={onShowRules}>Vis Regler</button>
-      <button onClick={onShowHighscore}>Highscore</button>
-      <button onClick={onSelectTheme}>Velg Tema</button>
+      <button className="btn main-button" onClick={onSelectTheme}>
+        Velg Tema
+      </button>
+      <div className="secondary-button">
+        <button className="btn" onClick={onShowRules}>
+          Vis Instruksjoner
+        </button>
+        <button className="btn" onClick={onShowHighscore}>
+          Highscore
+        </button>
+      </div>
     </div>
   );
 };
