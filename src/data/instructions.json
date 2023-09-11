@@ -1,0 +1,13 @@
+{
+  "howToPlay": [
+    "Start spillet ved å velge et tema.",
+    "Et ord relatert til temaet vil vises på skjermen.",
+    "Skriv ordet så raskt som mulig og trykk 'Enter' eller mellomromstasten for å bekrefte.",
+    "..."
+  ],
+  "rules": [
+    "Du har 2 minutter til å skrive så mange ord som mulig.",
+    "Feil inntasting vil trekke poeng fra din totale score.",
+    "..."
+  ]
+}

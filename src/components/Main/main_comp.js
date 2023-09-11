@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import Buttons from "../Buttons/buttons_comp";
 import Modal from "../Modal/modal_comp";
+import Instructions from "../instructions_comp";
 import "./main_style.css";
 
 const Main = () => {
-  const [showRulesModal, setShowRulesModal] = useState(false);
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
+
   const [showHighscoreModal, setShowHighscoreModal] = useState(false);
 
-  const handleShowRules = () => {
-    setShowRulesModal(true);
+  const handleShowInstructions = () => {
+    setShowInstructionsModal(true);
   };
 
   const handleShowHighscore = () => {
@@ -20,7 +22,7 @@ const Main = () => {
   };
 
   const handleCloseModal = () => {
-    setShowRulesModal(false);
+    setShowInstructionsModal(false);
     setShowHighscoreModal(false);
   };
 
@@ -32,15 +34,13 @@ const Main = () => {
         ulike temaer.
       </p>
       <Buttons
-        onShowRules={handleShowRules}
+        onShowRules={handleShowInstructions}
         onShowHighscore={handleShowHighscore}
         onSelectTheme={handleSelectTheme}
       />
-      <Modal isOpen={showRulesModal} onClose={handleCloseModal}>
-        Her kan du legge til reglene for spillet.
-      </Modal>
-      <Modal isOpen={showHighscoreModal} onClose={handleCloseModal}>
-        Her kan du vise highscore-listen.
+
+      <Modal isOpen={showInstructionsModal} onClose={handleCloseModal}>
+        <Instructions />
       </Modal>
     </main>
   );
