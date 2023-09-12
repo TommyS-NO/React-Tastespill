@@ -5,9 +5,14 @@ import Instructions from "../instructions_comp";
 import "./main_style.css";
 
 const Main = () => {
+  const [username, setUsername] = useState("");
+  const [showUsernameModal, setShowUsernameModal] = useState(false);
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
-
   const [showHighscoreModal, setShowHighscoreModal] = useState(false);
+
+  const handleOpenUsernameModal = () => {
+    setShowUsernameModal(true);
+  };
 
   const handleShowInstructions = () => {
     setShowInstructionsModal(true);
@@ -17,7 +22,12 @@ const Main = () => {
     setShowHighscoreModal(true);
   };
 
-  const handleSelectTheme = () => {};
+  const handleSelectTheme = () => {
+    if (!username) {
+      handleOpenUsernameModal();
+      return;
+    }
+  };
 
   const handleCloseModal = () => {
     setShowInstructionsModal(false);
@@ -37,8 +47,27 @@ const Main = () => {
         onSelectTheme={handleSelectTheme}
       />
 
+      <Modal
+        isOpen={showUsernameModal}
+        onClose={() => setShowUsernameModal(false)}
+      >
+        <h2>Opprett brukernavn</h2>
+        <input
+          type="text"
+          placeholder="Skriv ditt brukernavn her"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <button onClick={() => setShowUsernameModal(false)}>Bekreft</button>
+      </Modal>
+
       <Modal isOpen={showInstructionsModal} onClose={handleCloseModal}>
         <Instructions />
+      </Modal>
+
+      {/* modal for Highscore senere */}
+      <Modal isOpen={showHighscoreModal} onClose={handleCloseModal}>
+        {/* Innhold  Highscore modal */}
       </Modal>
     </main>
   );
