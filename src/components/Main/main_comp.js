@@ -2,36 +2,27 @@ import React, { useState } from "react";
 import Buttons from "../Buttons/buttons_comp";
 import Modal from "../Modal/modal_comp";
 import Instructions from "../instructions_comp";
+import Game from "../Game/game_comp";
 import "./main_style.css";
 
 const Main = () => {
   const [username, setUsername] = useState("");
-  const [showUsernameModal, setShowUsernameModal] = useState(false);
-  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
-  const [showHighscoreModal, setShowHighscoreModal] = useState(false);
+  const [modalState, setModalState] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [theme, setTheme] = useState("");
 
-  const handleOpenUsernameModal = () => {
-    setShowUsernameModal(true);
-  };
-
-  const handleShowInstructions = () => {
-    setShowInstructionsModal(true);
-  };
-
-  const handleShowHighscore = () => {
-    setShowHighscoreModal(true);
-  };
-
-  const handleSelectTheme = () => {
-    if (!username) {
-      handleOpenUsernameModal();
+  const handleConfirmUsername = () => {
+    if (!username.trim()) {
+      setErrorMessage("Vennligst oppgi et brukernavn for å fortsette.");
       return;
     }
+    setErrorMessage("");
+    setModalState("themeSelection");
   };
 
-  const handleCloseModal = () => {
-    setShowInstructionsModal(false);
-    setShowHighscoreModal(false);
+  const handleSelectTheme = (selectedTheme) => {
+    setTheme(selectedTheme);
+    setModalState("game");
   };
 
   return (
@@ -41,33 +32,51 @@ const Main = () => {
         Her kan du forbedre tastaturferdighetene dine samtidig som du lærer om
         ulike temaer.
       </p>
+
       <Buttons
-        onShowRules={handleShowInstructions}
-        onShowHighscore={handleShowHighscore}
-        onSelectTheme={handleSelectTheme}
+        onStartGame={() => setModalState("username")}
+        onShowRules={() => setModalState("instructions")}
+        onShowHighscore={() => setModalState("highscore")}
       />
 
-      <Modal
-        isOpen={showUsernameModal}
-        onClose={() => setShowUsernameModal(false)}
-      >
-        <h2>Opprett brukernavn</h2>
-        <input
-          type="text"
-          placeholder="Skriv ditt brukernavn her"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button onClick={() => setShowUsernameModal(false)}>Bekreft</button>
-      </Modal>
+      <Modal isOpen={modalState !== null} onClose={() => setModalState(null)}>
+        {modalState === "username" && (
+          <>
+            <h2>Opprett brukernavn</h2>
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+            <input
+              type="text"
+              placeholder="Skriv ditt brukernavn her"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <button onClick={handleConfirmUsername}>Bekreft</button>
+          </>
+        )}
 
-      <Modal isOpen={showInstructionsModal} onClose={handleCloseModal}>
-        <Instructions />
-      </Modal>
+        {modalState === "instructions" && <Instructions />}
 
-      {/* modal for Highscore senere */}
-      <Modal isOpen={showHighscoreModal} onClose={handleCloseModal}>
-        {/* Innhold  Highscore modal */}
+        {modalState === "themeSelection" && (
+          <>
+            <h2>Velg et tema</h2>
+            <button onClick={() => handleSelectTheme("OktoberFest")}>
+              Tema 1: OktoberFest
+            </button>
+            <button
+              onClick={() => handleSelectTheme("Breast Cancer Awareness Month")}
+            >
+              Tema 2: Breast Cancer Awareness Month
+            </button>
+            <button onClick={() => handleSelectTheme("Høst")}>
+              Tema 3: Høst
+            </button>
+            <button onClick={() => handleSelectTheme("Halloween")}>
+              Tema 4: Halloween
+            </button>
+          </>
+        )}
+
+        {modalState === "game" && <Game theme={theme} />}
       </Modal>
     </main>
   );

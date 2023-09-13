@@ -1,22 +1,13 @@
 import React from "react";
 import "./buttons_style.css";
 
-const Buttons = ({ onShowRules, onShowHighscore, onSelectTheme }) => {
+function Buttons({ onStartGame, onShowRules, onShowHighscore }) {
   return (
-    <div className="buttons-container">
-      <button className="btn main-button" onClick={onSelectTheme}>
-        Velg Tema
-      </button>
-      <div className="secondary-button">
-        <button className="btn" onClick={onShowRules}>
-          Vis Instruksjoner
-        </button>
-        <button className="btn" onClick={onShowHighscore}>
-          Highscore
-        </button>
-      </div>
+    <div>
+      <button onClick={onStartGame}>Start Spill</button>
+      <button onClick={onShowRules}>Regler</button>
+      <button onClick={onShowHighscore}>Høy poengsum</button>
     </div>
   );
-};
-
+}
 export default Buttons;

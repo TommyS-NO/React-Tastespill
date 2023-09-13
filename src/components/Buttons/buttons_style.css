@@ -2,23 +2,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 }
 
 .btn {
   font-size: 18px;
   padding: 12px 20px;
-}
-
-.main-button {
-  background-color: brown;
-  color: white;
   font-weight: 700;
   width: 200px;
-  margin-bottom: 20px;
 }
 
-.secondary-button button {
+.main-btn {
+  background-color: brown;
+  color: white;
+}
+
+.second-btn {
   background-color: rgb(165, 112, 42);
   color: white;
-  font-weight: 700;
+}
+
+.third-btn {
+  background-color: rgb(145, 92, 32);
+  color: white;
 }
