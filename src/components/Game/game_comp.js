@@ -44,17 +44,21 @@ const Game = ({ theme }) => {
     } else if (countdown === 0 && gameStatus === "notStarted") {
       setGameStatus("inProgress");
       fetchRandomWord();
-      const timerId = setInterval(() => {
-        setTimer((prevTime) => {
-          if (prevTime <= 1) {
-            setGameStatus("gameOver");
-            clearInterval(timerId);
-            return 0;
-          }
-          return prevTime - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timerId);
+
+      // Introduce a delay before starting the game timer
+      setTimeout(() => {
+        const timerId = setInterval(() => {
+          setTimer((prevTime) => {
+            if (prevTime <= 1) {
+              setGameStatus("gameOver");
+              clearInterval(timerId);
+              return 0;
+            }
+            return prevTime - 1;
+          });
+        }, 1000);
+        return () => clearInterval(timerId);
+      }, 500);
     }
   }, [countdown, fetchRandomWord, gameStatus]);
 
