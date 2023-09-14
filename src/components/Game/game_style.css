@@ -30,3 +30,9 @@
   right: 10px;
   font-size: 1rem;
 }
+.game-over-message {
+  font-size: 24px;
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+}
