@@ -1,5 +1,5 @@
 import React from "react";
-import instructionsData from "./../data/instructions.json";
+import instructionsData from "./instructions.json";
 
 const Instructions = () => {
   return (

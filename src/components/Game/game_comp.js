@@ -12,7 +12,7 @@ const Game = ({ theme }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`./../../data/${theme}.json`);
+        const response = await fetch(`/data/${theme}.json`);
 
         if (!response.ok) {
           throw new Error(
@@ -45,7 +45,7 @@ const Game = ({ theme }) => {
       setGameStatus("inProgress");
       fetchRandomWord();
 
-      // Introduce a delay before starting the game timer
+      // a delay before starting the game timer
       setTimeout(() => {
         const timerId = setInterval(() => {
           setTimer((prevTime) => {

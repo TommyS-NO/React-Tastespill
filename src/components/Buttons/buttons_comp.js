@@ -6,7 +6,7 @@ function Buttons({ onStartGame, onShowRules, onShowHighscore }) {
     <div>
       <button onClick={onStartGame}>Start Spill</button>
       <button onClick={onShowRules}>Regler</button>
-      <button onClick={onShowHighscore}>Høy poengsum</button>
+      <button onClick={onShowHighscore}>High score</button>
     </div>
   );
 }
