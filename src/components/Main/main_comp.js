@@ -63,7 +63,7 @@ const Main = () => {
               Tema 1: OktoberFest
             </button>
             <button
-              onClick={() => handleSelectTheme("Breast Cancer Awareness Month")}
+              onClick={() => handleSelectTheme("Breast_Cancer_Awareness_Month")}
             >
               Tema 2: Breast Cancer Awareness Month
             </button>
