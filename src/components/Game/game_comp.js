@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, Fragment } from "react";
 import "./game_style.css";
 
-const Game = ({ theme }) => {
+const Game = ({ theme, playerName }) => {
+  const [score, setScore] = useState(0);
+  const [correctWordStreak, setCorrectWordStreak] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [wordList, setWordList] = useState([]);
   const [currentWord, setCurrentWord] = useState("");
@@ -64,6 +66,21 @@ const Game = ({ theme }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === " ") {
+      if (inputValue === currentWord) {
+        setScore((prevScore) => prevScore + inputValue.length);
+        setCorrectWordStreak((prevStreak) => prevStreak + 1);
+        if (correctWordStreak >= 2) {
+          setScore((prevScore) => prevScore + 50);
+          setCorrectWordStreak(0);
+        }
+      } else {
+        const penalty = Math.min(
+          5,
+          5 - (inputValue.length - currentWord.length)
+        );
+        setScore((prevScore) => prevScore - penalty);
+        setCorrectWordStreak(0);
+      }
       fetchRandomWord();
       setInputValue("");
     }
@@ -75,7 +92,7 @@ const Game = ({ theme }) => {
         <div className="countdown">{countdown}</div>
       )}
       {gameStatus === "inProgress" && (
-        <>
+        <Fragment>
           <div className="word-display">{currentWord}</div>
           <input
             type="text"
@@ -89,7 +106,7 @@ const Game = ({ theme }) => {
             Tid igjen: {Math.floor(timer / 60)}:
             {String(timer % 60).padStart(2, "0")}
           </div>
-        </>
+        </Fragment>
       )}
       {gameStatus === "gameOver" && (
         <div className="game-over-message">Game Over</div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import Buttons from "../Buttons/buttons_comp";
 import Modal from "../Modal/modal_comp";
 import Instructions from "../instructions_comp";
@@ -41,7 +41,7 @@ const Main = () => {
 
       <Modal isOpen={modalState !== null} onClose={() => setModalState(null)}>
         {modalState === "username" && (
-          <>
+          <Fragment>
             <h2>Opprett brukernavn</h2>
             {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
             <input
@@ -51,13 +51,13 @@ const Main = () => {
               onChange={(e) => setUsername(e.target.value)}
             />
             <button onClick={handleConfirmUsername}>Bekreft</button>
-          </>
+          </Fragment>
         )}
 
         {modalState === "instructions" && <Instructions />}
 
         {modalState === "themeSelection" && (
-          <>
+          <Fragment>
             <h2>Velg et tema</h2>
             <button onClick={() => handleSelectTheme("OktoberFest")}>
               Tema 1: OktoberFest
@@ -73,7 +73,7 @@ const Main = () => {
             <button onClick={() => handleSelectTheme("Halloween")}>
               Tema 4: Halloween
             </button>
-          </>
+          </Fragment>
         )}
 
         {modalState === "game" && <Game theme={theme} />}
