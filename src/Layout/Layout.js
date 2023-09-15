@@ -1,7 +1,5 @@
 import React from "react";
-import "./header_style.css";
-import "./footer_style.css";
-
+import "./Layout.css";
 const Layout = ({ children }) => {
   return (
     <div className="layout-container">
