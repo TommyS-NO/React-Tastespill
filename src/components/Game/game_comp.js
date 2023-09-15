@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useCallback, Fragment } from "react";
 import "./game_style.css";
+import HighScoreList from "../Highscore/highscore_comp";
 
-const Game = ({ theme, playerName }) => {
+const Game = ({ theme }) => {
+  const [playerName, setPlayerName] = useState("");
+  const [hasEnteredName, setHasEnteredName] = useState(false);
   const [score, setScore] = useState(0);
+  const [highScores, setHighScores] = useState([]);
+
   const [correctWordStreak, setCorrectWordStreak] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [wordList, setWordList] = useState([]);
   const [currentWord, setCurrentWord] = useState("");
   const [countdown, setCountdown] = useState(3);
-  const [timer, setTimer] = useState(120);
+  const [timer, setTimer] = useState(45);
   const [gameStatus, setGameStatus] = useState("notStarted");
 
   useEffect(() => {
@@ -64,19 +69,51 @@ const Game = ({ theme, playerName }) => {
     }
   }, [countdown, fetchRandomWord, gameStatus]);
 
+  useEffect(() => {
+    if (gameStatus === "gameOver") {
+      const storedHighScores =
+        JSON.parse(localStorage.getItem("highScores")) || [];
+
+      const existingPlayerIndex = storedHighScores.findIndex(
+        (entry) => entry.name === playerName
+      );
+      if (
+        existingPlayerIndex > -1 &&
+        storedHighScores[existingPlayerIndex].score < score
+      ) {
+        storedHighScores[existingPlayerIndex].score = score;
+      } else {
+        storedHighScores.push({ name: playerName, score: score });
+      }
+
+      const topScores = storedHighScores
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+
+      localStorage.setItem("highScores", JSON.stringify(topScores));
+      setHighScores(topScores);
+    }
+  }, [gameStatus, playerName, score]);
+
   const handleKeyDown = (e) => {
     if (e.key === " ") {
+      // Hvis inntastet ord matcher det nåværende ordet
       if (inputValue === currentWord) {
+        // RPB: Poeng per riktig bokstav
         setScore((prevScore) => prevScore + inputValue.length);
+        // WBP: Poeng for ordavslutning
+        setScore((prevScore) => prevScore + 50);
+        // Ha-rick poeng (TBP)
         setCorrectWordStreak((prevStreak) => prevStreak + 1);
-        if (correctWordStreak >= 2) {
-          setScore((prevScore) => prevScore + 50);
+        if (correctWordStreak === 2) {
+          setScore((prevScore) => prevScore + 100);
           setCorrectWordStreak(0);
         }
       } else {
+        // TFB: Poengtrekk ved feil bokstav
         const penalty = Math.min(
           5,
-          5 - (inputValue.length - currentWord.length)
+          Math.abs(inputValue.length - currentWord.length)
         );
         setScore((prevScore) => prevScore - penalty);
         setCorrectWordStreak(0);
@@ -87,29 +124,48 @@ const Game = ({ theme, playerName }) => {
   };
 
   return (
-    <div className="game-box">
-      {gameStatus === "notStarted" && countdown > 0 && (
-        <div className="countdown">{countdown}</div>
-      )}
-      {gameStatus === "inProgress" && (
-        <Fragment>
-          <div className="word-display">{currentWord}</div>
+    <div className="game-container">
+      {!hasEnteredName ? (
+        <div className="name-entry">
           <input
             type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            autoFocus
-            onKeyDown={handleKeyDown}
-            className="word-input"
+            placeholder="Skriv inn ditt navn"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
           />
-          <div className="timer">
-            Tid igjen: {Math.floor(timer / 60)}:
-            {String(timer % 60).padStart(2, "0")}
-          </div>
-        </Fragment>
-      )}
-      {gameStatus === "gameOver" && (
-        <div className="game-over-message">Game Over</div>
+          <button onClick={() => setHasEnteredName(true)}>Start Spill</button>
+        </div>
+      ) : (
+        <div className="game-box">
+          {gameStatus === "notStarted" && countdown > 0 && (
+            <div className="countdown">{countdown}</div>
+          )}
+          {gameStatus === "inProgress" && (
+            <Fragment>
+              <div className="word-display">{currentWord}</div>
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                autoFocus
+                onKeyDown={handleKeyDown}
+                className="word-input"
+              />
+              <div className="timer">
+                Tid igjen: {Math.floor(timer / 60)}:
+                {String(timer % 60).padStart(2, "0")}
+              </div>
+            </Fragment>
+          )}
+          {gameStatus === "gameOver" && (
+            <Fragment>
+              <div className="game-over-message">Spill Over</div>
+              <div className="score-message">Din Poengsum: {score}</div>
+              <div className="ranking-message"></div>
+              <HighScoreList scores={highScores} />
+            </Fragment>
+          )}
+        </div>
       )}
     </div>
   );
