@@ -7,6 +7,7 @@ const Game = ({ theme }) => {
   const [hasEnteredName, setHasEnteredName] = useState(false);
   const [score, setScore] = useState(0);
   const [highScores, setHighScores] = useState([]);
+  const [playerRank, setPlayerRank] = useState(null);
 
   const [correctWordStreak, setCorrectWordStreak] = useState(0);
   const [inputValue, setInputValue] = useState("");
@@ -77,6 +78,7 @@ const Game = ({ theme }) => {
       const existingPlayerIndex = storedHighScores.findIndex(
         (entry) => entry.name === playerName
       );
+
       if (
         existingPlayerIndex > -1 &&
         storedHighScores[existingPlayerIndex].score < score
@@ -92,6 +94,13 @@ const Game = ({ theme }) => {
 
       localStorage.setItem("highScores", JSON.stringify(topScores));
       setHighScores(topScores);
+
+      // Finn spillerens plassering etter at vi har oppdatert scorelisten
+      const playerRanking =
+        topScores.findIndex(
+          (entry) => entry.name === playerName && entry.score === score
+        ) + 1;
+      setPlayerRank(playerRanking);
     }
   }, [gameStatus, playerName, score]);
 
@@ -161,7 +170,13 @@ const Game = ({ theme }) => {
             <Fragment>
               <div className="game-over-message">Spill Over</div>
               <div className="score-message">Din Poengsum: {score}</div>
-              <div className="ranking-message"></div>
+              <div className="ranking-message">
+                {playerRank <= 3 && playerRank > 0
+                  ? "WoHO! Du er blant topp 3!"
+                  : playerRank
+                  ? `Du fikk ${playerRank}. plass på Highscore listen.`
+                  : `Din score nådde dessverre ikke topp 10.`}
+              </div>
               <HighScoreList scores={highScores} />
             </Fragment>
           )}
