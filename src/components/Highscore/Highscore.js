@@ -1,13 +1,11 @@
 import React from "react";
 
-const HighScoreList = () => {
-  const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
-
+const HighScoreList = ({ scores }) => {
   return (
-    <div>
+    <div className="highscore-container">
       <h2>High Scores</h2>
       <ul>
-        {highScores.map((entry, index) => (
+        {scores.map((entry, index) => (
           <li key={index}>
             {entry.name}: {entry.score}
           </li>
