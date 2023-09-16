@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
-import Buttons from "../Buttons/buttons_comp";
-import Modal from "../Modal/modal_comp";
+import Buttons from "../Buttons/Buttons";
+import Modal from "../Modal/Modal";
 import Instructions from "../../containers/Instructions/instructions_comp";
 import Game from "../../containers/Game/Game";
 import "./main_style.css";
