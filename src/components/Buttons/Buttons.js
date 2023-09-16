@@ -1,12 +1,20 @@
 import React from "react";
 import "./buttons_style.css";
 
-function Button({ text, onClick, className, disabled }) {
+function Buttons({ onStartGame, onShowRules, onShowHighscore }) {
   return (
-    <button onClick={onClick} className={className} disabled={disabled}>
-      {text}
-    </button>
+    <div className="buttons-container">
+      <button onClick={onStartGame} className="btn main-btn">
+        Start Spill
+      </button>
+      <button onClick={onShowRules} className="btn second-btn">
+        Instruksjoner
+      </button>
+      <button onClick={onShowHighscore} className="btn third-btn">
+        Høy Score
+      </button>
+    </div>
   );
 }
 
-export default Button;
+export default Buttons;

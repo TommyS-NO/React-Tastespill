@@ -25,6 +25,42 @@ const Main = () => {
     setModalState("game");
   };
 
+  const handleGameOver = () => {
+    setModalState(null);
+  };
+
+  const renderUsernamePrompt = () => (
+    <Fragment>
+      <h2>Opprett brukernavn</h2>
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+      <input
+        type="text"
+        placeholder="Skriv ditt brukernavn her"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <button onClick={handleConfirmUsername}>Bekreft</button>
+    </Fragment>
+  );
+
+  const renderThemeSelection = () => (
+    <Fragment>
+      <h2>Velg et tema</h2>
+      <button onClick={() => handleSelectTheme("OktoberFest")}>
+        Tema 1: OktoberFest
+      </button>
+      <button
+        onClick={() => handleSelectTheme("Breast_Cancer_Awareness_Month")}
+      >
+        Tema 2: Breast Cancer Awareness Month
+      </button>
+      <button onClick={() => handleSelectTheme("Høst")}>Tema 3: Høst</button>
+      <button onClick={() => handleSelectTheme("Halloween")}>
+        Tema 4: Halloween
+      </button>
+    </Fragment>
+  );
+
   return (
     <main className="main-content">
       <h2>Velkommen til Høstens Tidsfordriv</h2>
@@ -40,43 +76,12 @@ const Main = () => {
       />
 
       <Modal isOpen={modalState !== null} onClose={() => setModalState(null)}>
-        {modalState === "username" && (
-          <Fragment>
-            <h2>Opprett brukernavn</h2>
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-            <input
-              type="text"
-              placeholder="Skriv ditt brukernavn her"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <button onClick={handleConfirmUsername}>Bekreft</button>
-          </Fragment>
-        )}
-
+        {modalState === "username" && renderUsernamePrompt()}
         {modalState === "instructions" && <Instructions />}
-
-        {modalState === "themeSelection" && (
-          <Fragment>
-            <h2>Velg et tema</h2>
-            <button onClick={() => handleSelectTheme("OktoberFest")}>
-              Tema 1: OktoberFest
-            </button>
-            <button
-              onClick={() => handleSelectTheme("Breast_Cancer_Awareness_Month")}
-            >
-              Tema 2: Breast Cancer Awareness Month
-            </button>
-            <button onClick={() => handleSelectTheme("Høst")}>
-              Tema 3: Høst
-            </button>
-            <button onClick={() => handleSelectTheme("Halloween")}>
-              Tema 4: Halloween
-            </button>
-          </Fragment>
+        {modalState === "themeSelection" && renderThemeSelection()}
+        {modalState === "game" && (
+          <Game theme={theme} onGameOver={handleGameOver} />
         )}
-
-        {modalState === "game" && <Game theme={theme} />}
       </Modal>
     </main>
   );
