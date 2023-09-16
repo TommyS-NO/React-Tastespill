@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
       <main>{children}</main>
 
       <footer className="footer">
-        <p>© 2023 Tastespill. Alle rettigheter reservert.</p>
+        <p>© 2023 Tommy S.Arbeidskrav_1_React.</p>
       </footer>
     </div>
   );

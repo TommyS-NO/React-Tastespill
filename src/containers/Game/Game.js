@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, Fragment } from "react";
 import "./game_style.css";
-import HighScoreList from "../Highscore/highscore_comp";
+import HighScoreList from "../../components/Highscore/highscore_comp";
 
 const Game = ({ theme }) => {
   const [playerName, setPlayerName] = useState("");
