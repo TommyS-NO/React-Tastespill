@@ -1,18 +1,17 @@
 import React from "react";
-import "./modal_style.css";
 
-function Modal({ isOpen, onClose, children }) {
+const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) {
     return null;
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal-background" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
         {children}
-        <button onClick={onClose}>Lukk</button>
       </div>
     </div>
   );
-}
+};
+
 export default Modal;

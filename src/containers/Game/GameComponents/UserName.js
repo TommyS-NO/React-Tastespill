@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 
-const UserNameInput = ({ playerName, setPlayerName, setHasEnteredName }) => {
+const UserName = ({ setPlayerName }) => {
+  const [inputValue, setInputValue] = useState("");
+
   return (
-    <div className="userName-input">
+    <div>
       <input
         type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
         placeholder="Skriv inn ditt navn"
-        value={playerName}
-        onChange={(e) => setPlayerName(e.target.value)}
       />
-      <button onClick={() => setHasEnteredName(true)}>Start Spill</button>
+      <button
+        onClick={() => {
+          if (inputValue.trim() !== "") {
+            setPlayerName(inputValue);
+          }
+        }}
+      >
+        Start spill
+      </button>
     </div>
   );
 };
 
-export default UserNameInput;
+export default UserName;
