@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback, Fragment } from "react";
 import "./game_style.css";
 import ScoreSystem from "./GameComponents/ScoreSystem";
 import UserName from "./GameComponents/UserName";
+import Highscore from "../../components/Highscore/Highscore";
 
 const Game = ({ theme }) => {
   const [inputValue, setInputValue] = useState("");
   const [wordList, setWordList] = useState([]);
   const [currentWord, setCurrentWord] = useState("");
   const [countdown, setCountdown] = useState(3);
-  const [timer, setTimer] = useState(20); //Spill tid.
+  const [timer, setTimer] = useState(20);
   const [gameStatus, setGameStatus] = useState("notStarted");
   const [playerName, setPlayerName] = useState(null);
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
@@ -20,32 +21,8 @@ const Game = ({ theme }) => {
     setCurrentWord(wordList[randomIndex]);
   }, [wordList]);
 
-  const updateHighScores = (newScore) => {
-    let currentScores = JSON.parse(localStorage.getItem("highScores")) || [];
-    const existingPlayerIndex = currentScores.findIndex(
-      (score) => score.name === newScore.name
-    );
-    if (
-      existingPlayerIndex !== -1 &&
-      currentScores[existingPlayerIndex].score < newScore.score
-    ) {
-      currentScores.splice(existingPlayerIndex, 1);
-    }
-    currentScores.push(newScore);
-    const updatedScores = currentScores
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
-    localStorage.setItem("highScores", JSON.stringify(updatedScores));
-    const rank =
-      updatedScores.findIndex(
-        (score) =>
-          score.name === newScore.name && score.score === newScore.score
-      ) + 1;
-    if (rank === 0) {
-      setUserRank("utenfor topp 10");
-    } else {
-      setUserRank(rank);
-    }
+  const fetchHighScores = () => {
+    return JSON.parse(localStorage.getItem("highScores")) || [];
   };
 
   const handleKeyDown = (e) => {
@@ -56,8 +33,6 @@ const Game = ({ theme }) => {
       } else {
         setConsecutiveCorrect(0);
       }
-
-      // Forsink tømmingen av inputValue for å la ScoreSystem behandle den nåværende verdien.
       setTimeout(() => {
         fetchRandomWord();
         setInputValue("");
@@ -110,7 +85,6 @@ const Game = ({ theme }) => {
           setTimer((prevTime) => {
             if (prevTime <= 1) {
               setGameStatus("gameOver");
-              updateHighScores({ name: playerName, score: totalScore });
               clearInterval(timerId);
               return 0;
             }
@@ -120,7 +94,21 @@ const Game = ({ theme }) => {
         return () => clearInterval(timerId);
       }, 500);
     }
-  }, [countdown, fetchRandomWord, gameStatus, playerName, totalScore]);
+  }, [countdown, fetchRandomWord, gameStatus]);
+
+  useEffect(() => {
+    if (gameStatus === "gameOver") {
+      const highScores = fetchHighScores();
+      const playerIndex = highScores.findIndex(
+        (scoreData) => scoreData.name === playerName
+      );
+      if (playerIndex !== -1) {
+        setUserRank(playerIndex + 1);
+      } else {
+        setUserRank(null);
+      }
+    }
+  }, [gameStatus, playerName]);
 
   return (
     <div className="game-box">
@@ -159,19 +147,7 @@ const Game = ({ theme }) => {
             <Fragment>
               <div className="game-over-message">Game Over</div>
               <div className="rank-message">{displayRankMessage(userRank)}</div>
-              <div className="highscore-list">
-                <h2>Top 10 Highscores</h2>
-                {JSON.parse(localStorage.getItem("highScores") || "[]").map(
-                  (score, index) => (
-                    <div key={index}>
-                      {score.name} - {score.score}
-                    </div>
-                  )
-                )}
-                <button onClick={() => window.location.reload()}>
-                  Spill igjen
-                </button>
-              </div>
+              <Highscore newScore={{ name: playerName, score: totalScore }} />
             </Fragment>
           )}
         </Fragment>
