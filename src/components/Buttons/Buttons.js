@@ -11,7 +11,7 @@ function Buttons({ onStartGame, onShowRules, onShowHighscore }) {
         Instruksjoner
       </button>
       <button onClick={onShowHighscore} className="btn third-btn">
-        Høy Score
+        HighScore
       </button>
     </div>
   );

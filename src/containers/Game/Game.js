@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useCallback, Fragment } from "react";
 import "./game_style.css";
 import ScoreSystem from "./GameComponents/ScoreSystem";
-import UserName from "./GameComponents/UserName";
 import Highscore from "../../components/Highscore/Highscore";
 
-const Game = ({ theme }) => {
+const Game = ({ theme, playerName }) => {
   const [inputValue, setInputValue] = useState("");
   const [wordList, setWordList] = useState([]);
   const [currentWord, setCurrentWord] = useState("");
   const [countdown, setCountdown] = useState(3);
   const [timer, setTimer] = useState(20);
   const [gameStatus, setGameStatus] = useState("notStarted");
-  const [playerName, setPlayerName] = useState(null);
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [userRank, setUserRank] = useState(null);
@@ -21,12 +19,7 @@ const Game = ({ theme }) => {
     setCurrentWord(wordList[randomIndex]);
   }, [wordList]);
 
-  const fetchHighScores = () => {
-    return JSON.parse(localStorage.getItem("highScores")) || [];
-  };
-
   const handleKeyDown = (e) => {
-    console.log("Space pressed. Input:", inputValue);
     if (e.key === " ") {
       if (inputValue.trim() === currentWord) {
         setConsecutiveCorrect((prev) => prev + 1);
@@ -41,15 +34,39 @@ const Game = ({ theme }) => {
   };
 
   const displayRankMessage = (rank) => {
-    if (rank === 1) {
-      return "Gratulerer! Du er på 1. plass!";
-    } else if (rank === 2) {
-      return "Fantastisk! Du er på 2. plass!";
-    } else if (rank === 3) {
-      return "Bra jobbet! Du er på 3. plass!";
-    } else {
-      return `Du er på ${rank}. plass!`;
+    const rankMessages = [
+      "Gratulerer! Du er på 1. plass!",
+      "Fantastisk! Du er på 2. plass!",
+      "Bra jobbet! Du er på 3. plass!",
+    ];
+
+    if (rank <= 3) {
+      return rankMessages[rank - 1];
     }
+
+    return `Du er på ${rank}. plass!`;
+  };
+
+  const updateHighScores = (score) => {
+    let currentScores = JSON.parse(localStorage.getItem("highScores")) || [];
+
+    const existingPlayerIndex = currentScores.findIndex(
+      (scoreEntry) => scoreEntry.name === score.name
+    );
+
+    if (
+      existingPlayerIndex !== -1 &&
+      currentScores[existingPlayerIndex].score < score.score
+    ) {
+      currentScores.splice(existingPlayerIndex, 1);
+    }
+
+    currentScores.push(score);
+    const updatedScores = currentScores
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 10);
+
+    localStorage.setItem("highScores", JSON.stringify(updatedScores));
   };
 
   useEffect(() => {
@@ -98,58 +115,61 @@ const Game = ({ theme }) => {
 
   useEffect(() => {
     if (gameStatus === "gameOver") {
-      const highScores = fetchHighScores();
-      const playerIndex = highScores.findIndex(
-        (scoreData) => scoreData.name === playerName
+      updateHighScores({ name: playerName, score: totalScore });
+      const updatedHighScores =
+        JSON.parse(localStorage.getItem("highScores")) || [];
+
+      const playerIndex = updatedHighScores.findIndex(
+        (scoreData) =>
+          scoreData.name === playerName && scoreData.score === totalScore
       );
+
       if (playerIndex !== -1) {
         setUserRank(playerIndex + 1);
       } else {
         setUserRank(null);
       }
     }
-  }, [gameStatus, playerName]);
+  }, [gameStatus, playerName, totalScore]);
 
   return (
     <div className="game-box">
-      {!playerName ? (
-        <UserName setPlayerName={setPlayerName} />
-      ) : (
+      {gameStatus === "notStarted" && countdown > 0 && (
+        <div className="countdown">{countdown}</div>
+      )}
+      {gameStatus === "inProgress" && (
         <Fragment>
-          {gameStatus === "notStarted" && countdown > 0 && (
-            <div className="countdown">{countdown}</div>
-          )}
-          {gameStatus === "inProgress" && (
-            <Fragment>
-              <div className="word-display">{currentWord}</div>
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                autoFocus
-                onKeyDown={handleKeyDown}
-                className="word-input"
-              />
-              <div className="timer">
-                Tid igjen: {Math.floor(timer / 60)}:
-                {String(timer % 60).padStart(2, "0")}
-              </div>
-              <ScoreSystem
-                input={inputValue}
-                correctWord={currentWord}
-                consecutiveCorrect={consecutiveCorrect}
-                totalScore={totalScore}
-                setTotalScore={setTotalScore}
-              />
-            </Fragment>
-          )}
-          {gameStatus === "gameOver" && (
-            <Fragment>
-              <div className="game-over-message">Game Over</div>
-              <div className="rank-message">{displayRankMessage(userRank)}</div>
-              <Highscore newScore={{ name: playerName, score: totalScore }} />
-            </Fragment>
-          )}
+          <div className="word-display">{currentWord}</div>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            autoFocus
+            onKeyDown={handleKeyDown}
+            className="word-input"
+          />
+          <div className="timer">
+            Tid igjen: {Math.floor(timer / 60)}:
+            {String(timer % 60).padStart(2, "0")}
+          </div>
+          <ScoreSystem
+            input={inputValue}
+            correctWord={currentWord}
+            consecutiveCorrect={consecutiveCorrect}
+            totalScore={totalScore}
+            setTotalScore={setTotalScore}
+          />
+        </Fragment>
+      )}
+      {gameStatus === "gameOver" && (
+        <Fragment>
+          <div className="game-over-message">Game Over</div>
+          <div className="rank-message">{displayRankMessage(userRank)}</div>
+          <Highscore
+            newScore={{ name: playerName, score: totalScore }}
+            playerName={playerName}
+            userRank={userRank}
+          />
         </Fragment>
       )}
     </div>

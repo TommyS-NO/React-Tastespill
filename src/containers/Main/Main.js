@@ -3,6 +3,7 @@ import Buttons from "../../components/Buttons/Buttons";
 import Modal from "../../components/Modal/Modal";
 import Instructions from "../Instructions/instructions_comp";
 import Game from "../Game/Game";
+import Highscore from "../../components/Highscore/Highscore";
 
 import UserName from "./../Game/GameComponents/UserName";
 import "./main_style.css";
@@ -35,6 +36,7 @@ const Main = () => {
         {modalState === "enterName" && (
           <UserName
             setPlayerName={(name) => {
+              console.log("name in Main", name);
               setPlayerName(name);
               setModalState("themeSelection");
             }}
@@ -65,6 +67,7 @@ const Main = () => {
           <Game theme={theme} playerName={playerName} />
         )}
         {modalState === "instructions" && <Instructions />}
+        {modalState === "highscore" && <Highscore />}
       </Modal>
     </main>
   );

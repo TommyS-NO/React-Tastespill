@@ -1,44 +1,24 @@
 import React, { useEffect, useState } from "react";
 
-const Highscore = ({ newScore }) => {
+const Highscore = ({ newScore, playerName, userRank }) => {
   const [highScores, setHighScores] = useState(
     JSON.parse(localStorage.getItem("highScores")) || []
   );
 
   useEffect(() => {
-    if (newScore && newScore.score >= 0) {
-      let currentScores = JSON.parse(localStorage.getItem("highScores")) || [];
-
-      const existingPlayerIndex = currentScores.findIndex(
-        (score) => score.name === newScore.name
-      );
-
-      // Erstatter spillerens score hvis den nye scoren er høyere
-      if (
-        existingPlayerIndex !== -1 &&
-        currentScores[existingPlayerIndex].score < newScore.score
-      ) {
-        currentScores.splice(existingPlayerIndex, 1);
-      }
-
-      currentScores.push(newScore);
-      const updatedScores = currentScores
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10);
-      setHighScores(updatedScores);
-      localStorage.setItem("highScores", JSON.stringify(updatedScores));
-    }
+    setHighScores(JSON.parse(localStorage.getItem("highScores")) || []);
   }, [newScore]);
 
   return (
     <div>
       <h1>Highscore</h1>
+      {userRank && <p>Din plassering: {userRank}</p>}
       {highScores.length === 0 ? (
         <p>No highscore recorded yet...</p>
       ) : (
         highScores.map((scoreData, index) => (
           <p key={index}>
-            {scoreData.name} - {scoreData.score}
+            {scoreData.name}: {scoreData.score}
           </p>
         ))
       )}
