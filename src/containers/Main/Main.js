@@ -17,6 +17,9 @@ const Main = () => {
     setTheme(selectedTheme);
     setModalState("game");
   };
+  const handleEndGame = () => {
+    setModalState("themeSelection");
+  };
 
   return (
     <main className="main-content">
@@ -64,7 +67,11 @@ const Main = () => {
         )}
 
         {modalState === "game" && (
-          <Game theme={theme} playerName={playerName} />
+          <Game
+            theme={theme}
+            playerName={playerName}
+            onGameEnd={handleEndGame}
+          />
         )}
         {modalState === "instructions" && <Instructions />}
         {modalState === "highscore" && <Highscore />}

@@ -3,21 +3,43 @@ import "./game_style.css";
 import ScoreSystem from "./GameComponents/ScoreSystem";
 import Highscore from "../../components/Highscore/Highscore";
 
-const Game = ({ theme, playerName }) => {
+const Game = ({ theme, playerName, onGameEnd }) => {
   const [inputValue, setInputValue] = useState("");
   const [wordList, setWordList] = useState([]);
   const [currentWord, setCurrentWord] = useState("");
   const [countdown, setCountdown] = useState(3);
-  const [timer, setTimer] = useState(20);
+  const [timer, setTimer] = useState(30);
   const [gameStatus, setGameStatus] = useState("notStarted");
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [userRank, setUserRank] = useState(null);
+  const [bufferedWordList, setBufferedWordList] = useState([]);
+
+  const restartGame = () => {
+    setInputValue("");
+    setCurrentWord("");
+    setCountdown(3);
+    setTimer(30);
+    setGameStatus("notStarted");
+    setConsecutiveCorrect(0);
+    setTotalScore(0);
+    setUserRank(null);
+    fetchRandomWord();
+  };
 
   const fetchRandomWord = useCallback(() => {
-    const randomIndex = Math.floor(Math.random() * wordList.length);
-    setCurrentWord(wordList[randomIndex]);
-  }, [wordList]);
+    if (bufferedWordList.length === 0) {
+      setBufferedWordList([...wordList]); // Fyll opp bufferen igjen hvis den er tom
+    }
+
+    const randomIndex = Math.floor(Math.random() * bufferedWordList.length);
+    const selectedWord = bufferedWordList[randomIndex];
+    setCurrentWord(selectedWord);
+
+    const updatedBuffer = [...bufferedWordList];
+    updatedBuffer.splice(randomIndex, 1);
+    setBufferedWordList(updatedBuffer);
+  }, [wordList, bufferedWordList]);
 
   const handleKeyDown = (e) => {
     if (e.key === " ") {
@@ -80,6 +102,7 @@ const Game = ({ theme, playerName }) => {
         }
         const data = await response.json();
         setWordList(data.ord);
+        setBufferedWordList(data.ord);
       } catch (error) {
         console.error("Error fetching the word list:", error);
       }
@@ -170,6 +193,8 @@ const Game = ({ theme, playerName }) => {
             playerName={playerName}
             userRank={userRank}
           />
+          <button onClick={restartGame}>Spill igjen med samme tema</button>
+          <button onClick={onGameEnd}>Velg nytt tema</button>
         </Fragment>
       )}
     </div>

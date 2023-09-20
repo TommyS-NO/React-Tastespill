@@ -8,7 +8,6 @@ const ScoreSystem = ({
   setTotalScore,
 }) => {
   useEffect(() => {
-    console.log("Ends with space?", input.endsWith(" "));
     if (input.endsWith(" ")) {
       const wordInput = input.trim();
       let scoreForCurrentWord = 0;
@@ -20,11 +19,11 @@ const ScoreSystem = ({
         }
       } else {
         const incorrectChars = [...wordInput].filter(
-          (char, index) => char !== correctWord[index]
+          (char, i) => char !== correctWord[i]
         ).length;
         scoreForCurrentWord = -Math.min(incorrectChars, 5);
       }
-      setTotalScore((prev) => Math.max(0, prev + scoreForCurrentWord)); // Ensure total score doesn't go negative
+      setTotalScore((prev) => Math.max(0, prev + scoreForCurrentWord)); // Total scoren skal ikke kunne bli -
     }
   }, [input, correctWord, consecutiveCorrect, setTotalScore]);
 
