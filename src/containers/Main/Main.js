@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Buttons from "../../components/Buttons/Buttons";
 import Modal from "../../components/Modal/Modal";
 import Instructions from "../Instructions/instructions_comp";
 import Game from "../Game/Game";
 import Highscore from "../../components/Highscore/Highscore";
-
 import UserName from "./../Game/GameComponents/UserName";
 import "./main_style.css";
 
@@ -12,13 +11,22 @@ const Main = () => {
   const [modalState, setModalState] = useState(null);
   const [theme, setTheme] = useState("");
   const [playerName, setPlayerName] = useState("");
+  const nameInputRef = useRef(null);
 
   const handleSelectTheme = (selectedTheme) => {
     setTheme(selectedTheme);
     setModalState("game");
   };
+
   const handleEndGame = () => {
     setModalState("themeSelection");
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      setPlayerName(nameInputRef.current.value);
+      setModalState("themeSelection");
+    }
   };
 
   return (
@@ -38,29 +46,37 @@ const Main = () => {
       <Modal isOpen={modalState !== null} onClose={() => setModalState(null)}>
         {modalState === "enterName" && (
           <UserName
+            innerRef={nameInputRef}
             setPlayerName={(name) => {
-              console.log("name in Main", name);
               setPlayerName(name);
               setModalState("themeSelection");
             }}
+            onKeyDown={handleKeyDown}
           />
         )}
 
         {modalState === "themeSelection" && (
           <div>
             <h2>Velg et tema</h2>
-            <button onClick={() => handleSelectTheme("OktoberFest")}>
+            <button
+              onClick={() => handleSelectTheme("OktoberFest")}
+              className="btn"
+            >
               Tema 1: OktoberFest
             </button>
             <button
               onClick={() => handleSelectTheme("Breast_Cancer_Awareness_Month")}
+              className="btn"
             >
               Tema 2: Breast Cancer Awareness Month
             </button>
-            <button onClick={() => handleSelectTheme("Høst")}>
+            <button onClick={() => handleSelectTheme("Høst")} className="btn">
               Tema 3: Høst
             </button>
-            <button onClick={() => handleSelectTheme("Halloween")}>
+            <button
+              onClick={() => handleSelectTheme("Halloween")}
+              className="btn"
+            >
               Tema 4: Halloween
             </button>
           </div>

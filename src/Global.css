@@ -1,6 +1,12 @@
 :root {
-  --primary-bg-color: #000000;
-  --primary-text-color: #fff;
+  --primary-color: #050505;
+  --background-color: #ecf0f1;
+  --text-color: hsl(36, 65%, 49%);
+  --secondary-color: #3498db;
+  --error-color: #e74c3c;
+  --primary-button-bg-color: #050505;
+  --primary-button-text-color: hsl(36, 65%, 49%);
+  --primary-button-hover-bg-color: #f0f0f0;
 }
 .modal-background {
   position: fixed;

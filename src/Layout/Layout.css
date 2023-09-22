@@ -1,20 +1,17 @@
-.header {
-  background-color: var(--primary-bg-color);
-  color: var(--primary-text-color);
+.header,
+.footer {
+  background-color: var(--primary-color);
+  color: var(--text-color);
   text-align: center;
   padding: 10px 0;
+  width: 100%;
+}
+
+.header {
   position: fixed;
   top: 0;
-  width: 100%;
-  /* z-index: 1000; */
 }
 .footer {
-  background-color: var(--primary-bg-color);
-  color: var(--primary-text-color);
-  text-align: center;
-  padding: 10px 0;
   position: fixed;
   bottom: 0;
-  width: 100%;
-  /* z-index: 1000; */
 }
