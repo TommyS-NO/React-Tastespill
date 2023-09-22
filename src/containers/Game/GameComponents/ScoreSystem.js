@@ -27,7 +27,7 @@ const ScoreSystem = ({
     }
   }, [input, correctWord, consecutiveCorrect, setTotalScore]);
 
-  return <div>Poeng: {totalScore}</div>;
+  return null;
 };
 
 export default ScoreSystem;

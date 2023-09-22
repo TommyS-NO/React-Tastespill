@@ -24,3 +24,7 @@
 .btn:hover {
   background-color: var(--primary-button-hover-bg-color);
 }
+.theme-button {
+  width: 250px;
+  text-align: center;
+}

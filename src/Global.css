@@ -6,7 +6,7 @@
   --error-color: #e74c3c;
   --primary-button-bg-color: #050505;
   --primary-button-text-color: hsl(36, 65%, 49%);
-  --primary-button-hover-bg-color: #f0f0f0;
+  --primary-button-hover-bg-color: #dd0808;
 }
 .modal-background {
   position: fixed;

@@ -60,24 +60,27 @@ const Main = () => {
             <h2>Velg et tema</h2>
             <button
               onClick={() => handleSelectTheme("OktoberFest")}
-              className="btn"
+              className="btn theme-button"
             >
-              Tema 1: OktoberFest
+              OktoberFest
             </button>
             <button
               onClick={() => handleSelectTheme("Breast_Cancer_Awareness_Month")}
-              className="btn"
+              className="btn theme-button"
             >
-              Tema 2: Breast Cancer Awareness Month
+              BreastCancer Awareness
             </button>
-            <button onClick={() => handleSelectTheme("Høst")} className="btn">
-              Tema 3: Høst
+            <button
+              onClick={() => handleSelectTheme("Høst")}
+              className="btn theme-button"
+            >
+              Høst
             </button>
             <button
               onClick={() => handleSelectTheme("Halloween")}
-              className="btn"
+              className="btn theme-button"
             >
-              Tema 4: Halloween
+              Halloween
             </button>
           </div>
         )}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import "./../../containers/Game/game_style.css";
 
-const Highscore = ({ newScore, playerName, userRank }) => {
+const Highscore = ({ newScore }) => {
   const [highScores, setHighScores] = useState(
     JSON.parse(localStorage.getItem("highScores")) || []
   );
@@ -12,16 +13,14 @@ const Highscore = ({ newScore, playerName, userRank }) => {
   return (
     <div>
       <h1>Highscore</h1>
-      {userRank && <p>Din plassering: {userRank}</p>}
-      {highScores.length === 0 ? (
-        <p>No highscore recorded yet...</p>
-      ) : (
-        highScores.map((scoreData, index) => (
-          <p key={index}>
-            {scoreData.name}: {scoreData.score}
-          </p>
-        ))
-      )}
+      {Array.from({ length: 10 }).map((_, index) => (
+        <p key={index}>
+          {index + 1},
+          {highScores[index]
+            ? `${highScores[index].name}: ${highScores[index].score}`
+            : "*****"}
+        </p>
+      ))}
     </div>
   );
 };

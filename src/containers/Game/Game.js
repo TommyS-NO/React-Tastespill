@@ -14,6 +14,7 @@ const Game = ({ theme, playerName, onGameEnd }) => {
   const [totalScore, setTotalScore] = useState(0);
   const [userRank, setUserRank] = useState(null);
   const [bufferedWordList, setBufferedWordList] = useState([]);
+  const [showExitConfirmation, setShowExitConfirmation] = useState(false);
 
   const restartGame = () => {
     setInputValue("");
@@ -25,6 +26,22 @@ const Game = ({ theme, playerName, onGameEnd }) => {
     setTotalScore(0);
     setUserRank(null);
     fetchRandomWord();
+  };
+  const exitGame = () => {
+    updateHighScores({ name: playerName, score: totalScore });
+    const updatedHighScores =
+      JSON.parse(localStorage.getItem("highScores")) || [];
+    const playerIndex = updatedHighScores.findIndex(
+      (scoreData) =>
+        scoreData.name === playerName && scoreData.score === totalScore
+    );
+
+    if (playerIndex !== -1) {
+      setUserRank(playerIndex + 1);
+    } else {
+      setUserRank(null);
+    }
+    setGameStatus("gameOver");
   };
 
   const fetchRandomWord = useCallback(() => {
@@ -64,9 +81,11 @@ const Game = ({ theme, playerName, onGameEnd }) => {
 
     if (rank <= 3) {
       return rankMessages[rank - 1];
+    } else if (rank) {
+      return `Du er på ${rank}. plass!`;
+    } else {
+      return "Dessverre nådde du ikke opp til topplisten denne gangen.";
     }
-
-    return `Du er på ${rank}. plass!`;
   };
 
   const updateHighScores = (score) => {
@@ -157,9 +176,27 @@ const Game = ({ theme, playerName, onGameEnd }) => {
 
   return (
     <div className="game-box">
+      <div className="top-bar">
+        <button
+          className="close-button"
+          onClick={() => {
+            if (window.confirm("Er du sikker på at du vil avslutte?")) {
+              exitGame();
+            }
+          }}
+        >
+          X
+        </button>
+        <div className="player-info">
+          <div>{playerName}</div>
+          <div>{totalScore} poeng</div>
+        </div>
+      </div>
+
       {gameStatus === "notStarted" && countdown > 0 && (
         <div className="countdown">{countdown}</div>
       )}
+
       {gameStatus === "inProgress" && (
         <Fragment>
           <div className="word-display">{currentWord}</div>
@@ -184,6 +221,7 @@ const Game = ({ theme, playerName, onGameEnd }) => {
           />
         </Fragment>
       )}
+
       {gameStatus === "gameOver" && (
         <Fragment>
           <div className="game-over-message">Game Over</div>

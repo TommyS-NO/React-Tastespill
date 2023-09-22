@@ -9,6 +9,8 @@
 }
 
 .modal {
+  min-width: 600px;
+  min-height: 400px;
   position: fixed;
   top: 0;
   right: 0;
@@ -19,7 +21,8 @@
   padding: 20px;
   z-index: 2;
   border-radius: 15px;
-  width: 300px;
+  width: 70%;
+  max-width: 800px;
   height: auto;
   animation: slideDown 0.7s ease-out;
 }
