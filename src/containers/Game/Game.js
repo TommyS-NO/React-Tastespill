@@ -3,7 +3,7 @@ import "./game_style.css";
 import ScoreSystem from "./GameComponents/ScoreSystem";
 import Highscore from "../../components/Highscore/Highscore";
 
-const Game = ({ theme, playerName, onGameEnd }) => {
+const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
   const [inputValue, setInputValue] = useState("");
   const [wordList, setWordList] = useState([]);
   const [currentWord, setCurrentWord] = useState("");
@@ -14,7 +14,6 @@ const Game = ({ theme, playerName, onGameEnd }) => {
   const [totalScore, setTotalScore] = useState(0);
   const [userRank, setUserRank] = useState(null);
   const [bufferedWordList, setBufferedWordList] = useState([]);
-  const [showExitConfirmation, setShowExitConfirmation] = useState(false);
 
   const restartGame = () => {
     setInputValue("");
@@ -179,14 +178,19 @@ const Game = ({ theme, playerName, onGameEnd }) => {
       <div className="top-bar">
         <button
           className="close-button"
-          onClick={() => {
-            if (window.confirm("Er du sikker på at du vil avslutte?")) {
-              exitGame();
-            }
-          }}
+          onClick={
+            gameStatus === "gameOver"
+              ? backToMain
+              : () => {
+                  if (window.confirm("Er du sikker på at du vil avslutte?")) {
+                    exitGame();
+                  }
+                }
+          }
         >
           X
         </button>
+
         <div className="player-info">
           <div>{playerName}</div>
           <div>{totalScore} poeng</div>

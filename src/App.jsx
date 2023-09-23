@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "./Layout/Layout";
 import Main from "./containers/Main/Main";
 import "./App.css";
 import "./Global.css";
 
-function App() {
+const App = () => {
+  const [view, setView] = useState("main");
+
   return (
     <div className="app">
       <Layout />
-      <Main />
+      <Main currentView={view} changeView={setView} />
       <Layout />
     </div>
   );
-}
+};
 
 export default App;

@@ -6,12 +6,13 @@
   justify-content: space-between;
   border: 1px solid #ccc;
   width: 80%;
-  height: 70vh;
-  position: relative;
+  min-height: 60vh;
+  max-height: 90vh;
   margin: 70px auto 0 auto;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 .player-info {
@@ -24,11 +25,15 @@
 .word-display {
   font-size: 2rem;
   margin-bottom: 20px;
+  align-self: center;
 }
 
 .word-input {
   padding: 10px;
   font-size: 1.5rem;
+  align-self: center;
+  margin: auto 0;
+  background-color: #f2f2f2;
 }
 
 .countdown {
@@ -37,7 +42,8 @@
 
 .timer {
   font-size: 2rem;
-  margin-bottom: 20px;
+  margin-bottom: 2px;
+  align-self: center;
 }
 
 .game-over-message {
@@ -57,10 +63,12 @@
   font-size: 10px;
   cursor: pointer;
 }
+
 .top-bar {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  z-index: 1;
 }
 
 .countdown-container {

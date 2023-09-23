@@ -28,6 +28,9 @@ const Main = () => {
       setModalState("themeSelection");
     }
   };
+  const backToMain = () => {
+    setModalState(null);
+  };
 
   return (
     <main className="main-content">
@@ -90,6 +93,7 @@ const Main = () => {
             theme={theme}
             playerName={playerName}
             onGameEnd={handleEndGame}
+            backToMain={backToMain}
           />
         )}
         {modalState === "instructions" && <Instructions />}
