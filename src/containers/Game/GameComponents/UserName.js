@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./../../../components/Modal/modal_style.css";
+import "./../../../components/Modal/Modal.scss";
 
 const UserName = ({ setPlayerName }) => {
   const [inputValue, setInputValue] = useState("");

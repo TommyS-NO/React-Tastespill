@@ -1,4 +1,5 @@
 import React from "react";
+import "./Modal.scss";
 
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) {
@@ -7,7 +8,7 @@ const Modal = ({ isOpen, onClose, children }) => {
 
   return (
     <div className="modal-background" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal bg-main" onClick={(e) => e.stopPropagation()}>
         {children}
       </div>
     </div>

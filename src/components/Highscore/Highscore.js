@@ -1,25 +1,41 @@
 import React, { useEffect, useState } from "react";
+import "./Highscore.scss";
+
+const getHighScoresFromLocalStorage = () => {
+  try {
+    return JSON.parse(localStorage.getItem("highScores")) || [];
+  } catch (error) {
+    console.error("Failed to retrieve high scores from localStorage:", error);
+    return [];
+  }
+};
 
 const Highscore = ({ newScore }) => {
-  const [highScores, setHighScores] = useState(
-    JSON.parse(localStorage.getItem("highScores")) || []
-  );
+  const [highScores, setHighScores] = useState(getHighScoresFromLocalStorage());
 
   useEffect(() => {
-    setHighScores(JSON.parse(localStorage.getItem("highScores")) || []);
+    setHighScores(getHighScoresFromLocalStorage());
   }, [newScore]);
+
+  const renderHighScoreList = () => {
+    return Array.from({ length: 10 }).map((_, index) => {
+      const { name = "*****", score = "*****" } = highScores[index] || {};
+      return (
+        <div className="highscore-entry" key={index}>
+          <span className="highscore-rank">{index + 1}</span>
+          <span className="highscore-name">{name}</span>
+          <span className="highscore-score">
+            {score !== "*****" ? `${score} Poeng` : "*****"}
+          </span>
+        </div>
+      );
+    });
+  };
 
   return (
     <div>
       <h1>Highscore</h1>
-      {Array.from({ length: 10 }).map((_, index) => (
-        <p key={index}>
-          {index + 1}
-          {highScores[index]
-            ? `${highScores[index].name}: ${highScores[index].score}`
-            : "*****"}
-        </p>
-      ))}
+      {renderHighScoreList()}
     </div>
   );
 };

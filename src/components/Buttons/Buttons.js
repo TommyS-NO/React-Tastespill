@@ -1,20 +1,18 @@
 import React from "react";
-import "./buttons_style.css";
+import "./Buttons.scss";
 
-function Buttons({ onStartGame, onShowRules, onShowHighscore }) {
-  return (
-    <div className="buttons-container">
-      <button onClick={onStartGame} className="btn main-btn">
-        Start Spill
-      </button>
-      <button onClick={onShowRules} className="btn second-btn">
-        Instruksjoner
-      </button>
-      <button onClick={onShowHighscore} className="btn third-btn">
-        HighScore
-      </button>
-    </div>
-  );
-}
+const Buttons = ({ onStartGame, onShowRules, onShowHighscore }) => (
+  <div className="buttons-container">
+    <button onClick={onStartGame} className="btn main-btn">
+      Start Spill
+    </button>
+    <button onClick={onShowRules} className="btn second-btn">
+      Instruksjoner
+    </button>
+    <button onClick={onShowHighscore} className="btn third-btn">
+      HighScore
+    </button>
+  </div>
+);
 
 export default Buttons;

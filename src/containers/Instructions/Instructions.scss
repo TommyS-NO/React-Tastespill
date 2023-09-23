@@ -1,0 +1,21 @@
+@import "./../../variables.scss";
+
+.instructions-container {
+  padding: 20px;
+
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.instructions-list,
+.rules-list {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.instructions-list li,
+.rules-list li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: $text-color;
+}

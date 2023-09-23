@@ -1,0 +1,36 @@
+@import "./../../variables.scss";
+@import "./../../mixins.scss";
+
+.buttons-container {
+  @include flex-center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn {
+  font-size: 18px;
+  padding: 12px 20px;
+  font-weight: 700;
+  width: 200px;
+  background-color: $primary-button-bg-color;
+  color: $primary-button-text-color;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: $primary-button-hover-bg-color;
+  }
+  // &.main-btn {
+  // }
+  // &.second-btn {
+  // }
+  // &.third-btn {
+  // }
+}
+
+.theme-button {
+  width: 250px;
+  text-align: center;
+}

@@ -1,12 +1,12 @@
 :root {
-  --primary-color: #050505;
+  --primary-color: rgb(104, 14, 41);
   --background-color: #ecf0f1;
-  --text-color: hsl(36, 65%, 49%);
+  --text-color: hsl(0, 0%, 100%);
   --secondary-color: #3498db;
   --error-color: #e74c3c;
-  --primary-button-bg-color: #050505;
-  --primary-button-text-color: hsl(36, 65%, 49%);
-  --primary-button-hover-bg-color: #dd0808;
+  --primary-button-bg-color: rgb(104, 14, 41);
+  --primary-button-text-color: white;
+  --primary-button-hover-bg-color: #0a0db8;
 }
 .modal-background {
   position: fixed;
@@ -33,20 +33,14 @@
   overflow: auto;
   overflow-y: auto;
 }
-.highscore-list {
-  border: 1px solid #000;
-  padding: 10px;
-  margin-top: 20px;
-  width: 300px;
-  max-height: 400px;
-  overflow-y: scroll;
-}
-
-.highscore-list h2 {
-  text-align: center;
-  margin-bottom: 10px;
-}
 
 .rank-message {
   margin: 20px 0;
+}
+.bg-main {
+  background-image: url("./assets/MainBackground.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: var(--text-color);
 }

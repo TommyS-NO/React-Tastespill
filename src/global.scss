@@ -1,0 +1,16 @@
+@import "./variables.scss";
+@import "./mixins.scss";
+
+body,
+html {
+  background-color: $background-color;
+  color: $text-color;
+}
+
+.bg-main {
+  background-image: url("./assets/MainBackground.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: $text-color;
+}

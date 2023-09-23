@@ -1,0 +1,20 @@
+@import "../../variables.scss";
+
+.header,
+.footer {
+  background-color: $primary-color;
+  color: $text-color;
+  text-align: center;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+}
