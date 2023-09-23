@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Layout from "./Layout/Layout";
+import Layout from "./containers/Layout/Layout";
 import Main from "./containers/Main/Main";
 import "./App.css";
 import "./Global.css";
