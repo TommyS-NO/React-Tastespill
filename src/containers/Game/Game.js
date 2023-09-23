@@ -8,12 +8,13 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
   const [wordList, setWordList] = useState([]);
   const [currentWord, setCurrentWord] = useState("");
   const [countdown, setCountdown] = useState(3);
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(60);
   const [gameStatus, setGameStatus] = useState("notStarted");
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [userRank, setUserRank] = useState(null);
   const [bufferedWordList, setBufferedWordList] = useState([]);
+  const [blinkTimer, setBlinkTimer] = useState(false);
 
   const restartGame = () => {
     setInputValue("");
@@ -155,6 +156,15 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
   }, [countdown, fetchRandomWord, gameStatus]);
 
   useEffect(() => {
+    if (timer === 30) {
+      setBlinkTimer(true);
+    }
+    if (timer < 30) {
+      setBlinkTimer(false);
+    }
+  }, [timer]);
+
+  useEffect(() => {
     if (gameStatus === "gameOver") {
       updateHighScores({ name: playerName, score: totalScore });
       const updatedHighScores =
@@ -212,10 +222,15 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
             onKeyDown={handleKeyDown}
             className="word-input"
           />
-          <div className="timer">
+          <div
+            className={`timer ${timer <= 30 ? "timer-red" : ""} ${
+              blinkTimer ? "timer-blink" : ""
+            }`}
+          >
             Tid igjen: {Math.floor(timer / 60)}:
             {String(timer % 60).padStart(2, "0")}
           </div>
+
           <ScoreSystem
             input={inputValue}
             correctWord={currentWord}
