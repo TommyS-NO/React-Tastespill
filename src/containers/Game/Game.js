@@ -4,6 +4,7 @@ import ScoreSystem from "./GameComponents/ScoreSystem";
 import Highscore from "../../components/Highscore/Highscore";
 
 const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
+  // 1. State-definisjoner
   const [inputValue, setInputValue] = useState("");
   const [wordList, setWordList] = useState([]);
   const [currentWord, setCurrentWord] = useState("");
@@ -16,6 +17,19 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
   const [bufferedWordList, setBufferedWordList] = useState([]);
   const [blinkTimer, setBlinkTimer] = useState(false);
   const [pulseTimer, setPulseTimer] = useState(false);
+
+  // 2. Fetch-relaterte funksjoner
+  const fetchRandomWord = useCallback(() => {
+    if (bufferedWordList.length === 0) {
+      setBufferedWordList([...wordList]);
+    }
+    const randomIndex = Math.floor(Math.random() * bufferedWordList.length);
+    const selectedWord = bufferedWordList[randomIndex];
+    setCurrentWord(selectedWord);
+    const updatedBuffer = [...bufferedWordList];
+    updatedBuffer.splice(randomIndex, 1);
+    setBufferedWordList(updatedBuffer);
+  }, [wordList, bufferedWordList]);
 
   useEffect(() => {
     async function fetchData() {
@@ -36,19 +50,41 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
     fetchData();
   }, [theme]);
 
-  const fetchRandomWord = useCallback(() => {
-    if (bufferedWordList.length === 0) {
-      setBufferedWordList([...wordList]);
+  // 3. Highscore-relaterte funksjoner
+  const displayRankMessage = (rank) => {
+    const rankMessages = [
+      "Gratulerer! Du er på 1. plass!",
+      "Fantastisk! Du er på 2. plass!",
+      "Bra jobbet! Du er på 3. plass!",
+    ];
+    if (rank <= 3) {
+      return rankMessages[rank - 1];
+    } else if (rank) {
+      return `Du er på ${rank}. plass!`;
+    } else {
+      return "Dessverre nådde du ikke opp til topplisten denne gangen.";
     }
-    const randomIndex = Math.floor(Math.random() * bufferedWordList.length);
-    const selectedWord = bufferedWordList[randomIndex];
-    setCurrentWord(selectedWord);
+  };
 
-    const updatedBuffer = [...bufferedWordList];
-    updatedBuffer.splice(randomIndex, 1);
-    setBufferedWordList(updatedBuffer);
-  }, [wordList, bufferedWordList]);
+  const updateHighScores = (score) => {
+    let currentScores = JSON.parse(localStorage.getItem("highScores")) || [];
+    const existingPlayerIndex = currentScores.findIndex(
+      (scoreEntry) => scoreEntry.name === score.name
+    );
+    if (
+      existingPlayerIndex !== -1 &&
+      currentScores[existingPlayerIndex].score < score.score
+    ) {
+      currentScores.splice(existingPlayerIndex, 1);
+    }
+    currentScores.push(score);
+    const updatedScores = currentScores
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 10);
+    localStorage.setItem("highScores", JSON.stringify(updatedScores));
+  };
 
+  // 4. Game-logikk funksjoner
   const handleKeyDown = (e) => {
     if (e.key === " ") {
       if (inputValue.trim() === currentWord) {
@@ -61,40 +97,6 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
         setInputValue("");
       }, 50);
     }
-  };
-
-  const displayRankMessage = (rank) => {
-    const rankMessages = [
-      "Gratulerer! Du er på 1. plass!",
-      "Fantastisk! Du er på 2. plass!",
-      "Bra jobbet! Du er på 3. plass!",
-    ];
-    return rank <= 3
-      ? rankMessages[rank - 1]
-      : rank
-      ? `Du er på ${rank}. plass!`
-      : "Dessverre nådde du ikke opp til topplisten denne gangen.";
-  };
-
-  const updateHighScores = (score) => {
-    const currentScores = JSON.parse(localStorage.getItem("highScores")) || [];
-    const existingPlayerIndex = currentScores.findIndex(
-      (scoreEntry) => scoreEntry.name === score.name
-    );
-
-    if (
-      existingPlayerIndex !== -1 &&
-      currentScores[existingPlayerIndex].score < score.score
-    ) {
-      currentScores.splice(existingPlayerIndex, 1);
-    }
-    currentScores.push(score);
-
-    const updatedScores = currentScores
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
-
-    localStorage.setItem("highScores", JSON.stringify(updatedScores));
   };
 
   const restartGame = () => {
@@ -117,10 +119,15 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
       (scoreData) =>
         scoreData.name === playerName && scoreData.score === totalScore
     );
-    setUserRank(playerIndex !== -1 ? playerIndex + 1 : null);
+    if (playerIndex !== -1) {
+      setUserRank(playerIndex + 1);
+    } else {
+      setUserRank(null);
+    }
     setGameStatus("gameOver");
   };
 
+  // 5. useEffect hooks
   useEffect(() => {
     if (gameStatus === "notStarted" && countdown > 0) {
       const timerId = setTimeout(() => setCountdown(countdown - 1), 1000);
@@ -128,24 +135,33 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
     } else if (countdown === 0 && gameStatus === "notStarted") {
       setGameStatus("inProgress");
       fetchRandomWord();
-      const timerId = setInterval(() => {
-        setTimer((prevTime) => {
-          if (prevTime <= 1) {
-            setGameStatus("gameOver");
-            clearInterval(timerId);
-            return 0;
-          }
-          return prevTime - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timerId);
+      setTimeout(() => {
+        const timerId = setInterval(() => {
+          setTimer((prevTime) => {
+            if (prevTime <= 1) {
+              setGameStatus("gameOver");
+              clearInterval(timerId);
+              return 0;
+            }
+            return prevTime - 1;
+          });
+        }, 1000);
+        return () => clearInterval(timerId);
+      }, 500);
     }
   }, [countdown, fetchRandomWord, gameStatus]);
 
   useEffect(() => {
-    const shouldBlink = [30, 60, 90].includes(timer);
-    setBlinkTimer(shouldBlink);
-    setPulseTimer(timer <= 10);
+    if (timer === 30 || timer === 60 || timer === 90) {
+      setBlinkTimer(true);
+    } else {
+      setBlinkTimer(false);
+    }
+    if (timer <= 10) {
+      setPulseTimer(true);
+    } else {
+      setPulseTimer(false);
+    }
   }, [timer]);
 
   useEffect(() => {
@@ -157,7 +173,11 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
         (scoreData) =>
           scoreData.name === playerName && scoreData.score === totalScore
       );
-      setUserRank(playerIndex !== -1 ? playerIndex + 1 : null);
+      if (playerIndex !== -1) {
+        setUserRank(playerIndex + 1);
+      } else {
+        setUserRank(null);
+      }
     }
   }, [gameStatus, playerName, totalScore]);
 
