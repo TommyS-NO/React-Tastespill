@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import Layout from "./containers/Layout/Layout";
 import Main from "./containers/Main/Main";
-import "./App.css";
-import "./Global.css";
+
+import "./global.scss";
 
 const App = () => {
   const [view, setView] = useState("main");
+  const [globalTheme, setGlobalTheme] = useState("main");
 
   return (
-    <div className="app">
+    <div className={`app bg-${globalTheme}`}>
       <Layout />
-      <Main currentView={view} changeView={setView} />
+      <Main
+        currentView={view}
+        changeView={setView}
+        setGlobalTheme={setGlobalTheme}
+      />
       <Layout />
     </div>
   );

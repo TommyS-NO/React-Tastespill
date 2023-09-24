@@ -18,23 +18,34 @@ const Highscore = ({ newScore }) => {
   }, [newScore]);
 
   const renderHighScoreList = () => {
-    return Array.from({ length: 10 }).map((_, index) => {
-      const { name = "*****", score = "*****" } = highScores[index] || {};
-      return (
-        <div className="highscore-entry" key={index}>
-          <span className="highscore-rank">{index + 1}</span>
-          <span className="highscore-name">{name}</span>
-          <span className="highscore-score">
-            {score !== "*****" ? `${score} Poeng` : "*****"}
-          </span>
-        </div>
-      );
-    });
+    return (
+      <table className="highscore-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>NAVN</th>
+            <th>POENG</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.from({ length: 10 }).map((_, index) => {
+            const { name = "*****", score = "*****" } = highScores[index] || {};
+            return (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{name}</td>
+                <td>{score !== "*****" ? `${score} Poeng` : "*****"}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
   };
 
   return (
     <div>
-      <h1>Highscore</h1>
+      <h1 className="high-h1">Highscore</h1>
       {renderHighScoreList()}
     </div>
   );

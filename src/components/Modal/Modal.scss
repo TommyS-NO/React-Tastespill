@@ -4,37 +4,39 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 .modal {
-  min-width: 600px;
-  min-height: 400px;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  background-color: $background-color;
+  position: relative;
+  background-image: url("./../../../public/assets/MainBackground.png");
+  width: 100%;
+  max-width: 900px;
+  color: $text-color;
   padding: 20px;
-  z-index: 2;
+  z-index: 4;
   border-radius: 15px;
-  width: 70%;
-  max-width: 800px;
-  height: auto;
   animation: slideDown 0.7s ease-out;
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
 
-@keyframes slideDown {
-  from {
-    transform: translateY(-90%);
-  }
-  to {
-    transform: translateY(0%);
+  &.full-screen {
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 40px);
+    padding: 0;
+    background-image: inherit;
   }
 }
 
@@ -48,6 +50,16 @@
   cursor: pointer;
 }
 
+.modal-content {
+  background-color: rgba(255, 255, 255, 0.8);
+  font-weight: bold;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
 button {
   margin: 10px;
   padding: 5px 15px;
@@ -57,36 +69,168 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+
+  &:hover {
+    background-color: $primary-button-hover-bg-color;
+  }
+}
+.highscore-btn-end-game-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
 }
 
-button:hover {
-  background-color: $primary-button-hover-bg-color;
-}
-
-.modal-content {
-  background-color: $text-color;
-  padding: 20px;
-  border-radius: 5px;
-  max-width: 500px;
-  width: 90%;
+.highscore-btn-end-game-container button {
+  flex: 1;
+  font-size: 20px;
+  padding: 15px 30px;
+  margin: 0 10px;
 }
 
 input[type="text"] {
   padding: 10px;
-  border: 2px solid $secondary-color;
-  border-radius: 4px;
-  font-size: 18px;
+  font-size: 24px;
   width: 100%;
   margin-bottom: 20px;
   transition: border-color 0.3s;
 }
 
-input[type="text"]:focus {
-  border-color: $primary-color;
-  outline: none;
+.bg-OktoberFest {
+  .word-display,
+  .player-info,
+  .timer,
+  .high-h1 {
+    color: $text-color;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+    font-size: 3rem;
+  }
+  .highscore-table {
+    color: $text-color;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  button,
+  .highscore-entry {
+    background-color: $primary-button-bg-color;
+    color: $text-color;
+  }
+
+  button:hover {
+    background-color: $primary-button-hover-bg-color;
+  }
+
+  .highscore-entry {
+    background-color: transparent;
+  }
 }
 
-input[type="text"]::placeholder {
-  color: $text-color;
-  opacity: 0.7;
+.bg-Autum {
+  .word-display,
+  .player-info,
+  .timer,
+  .high-h1 {
+    color: $text-color;
+    font-weight: bold;
+    font-size: 1.6rem;
+  }
+  .highscore-table {
+    color: $text-color;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  button,
+  .highscore-entry {
+    background-color: $primary-button-bg-color;
+    color: $text-color;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background-color: $primary-button-hover-bg-color;
+  }
+
+  .highscore-entry {
+    background-color: transparent;
+  }
+}
+
+.bg-Halloween {
+  .word-display,
+  .player-info,
+  .high-h1 {
+    color: red;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  .timer {
+    color: black;
+  }
+  .highscore-table {
+    color: rgb(49, 23, 196);
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  button,
+  .highscore-entry {
+    background-color: $primary-button-bg-color;
+    color: rgb(22, 197, 174); //fikse farge!
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background-color: $primary-button-hover-bg-color;
+  }
+
+  .highscore-entry {
+    background-color: transparent;
+  }
+}
+
+.bg-BCAM {
+  .word-display,
+  .word-input,
+  .player-info,
+  .timer,
+  .high-h1 {
+    color: black;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  .highscore-table {
+    color: rgb(49, 23, 196);
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  button,
+  .highscore-entry {
+    background-color: $primary-button-bg-color;
+    color: $text-color;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background-color: $primary-button-hover-bg-color;
+  }
+
+  .highscore-entry {
+    background-color: transparent;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-90%);
+  }
+  to {
+    transform: translateY(0%);
+  }
 }

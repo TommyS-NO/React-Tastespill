@@ -23,7 +23,7 @@ const ScoreSystem = ({
         ).length;
         scoreForCurrentWord = -Math.min(incorrectChars, 5);
       }
-      setTotalScore((prev) => Math.max(0, prev + scoreForCurrentWord)); // Total scoren skal ikke kunne bli -
+      setTotalScore((prev) => Math.max(0, prev + scoreForCurrentWord));
     }
   }, [input, correctWord, consecutiveCorrect, setTotalScore]);
 

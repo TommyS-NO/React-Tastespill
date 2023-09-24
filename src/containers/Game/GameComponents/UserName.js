@@ -26,11 +26,12 @@ const UserName = ({ setPlayerName }) => {
         height: "100%",
       }}
     >
-      <label htmlFor="username">Navn</label>
+      <div className="user-name-title">NAVN</div>
       <input
         id="username"
         type="text"
         value={inputValue}
+        className="user-input-field"
         onChange={(e) => {
           if (
             e.target.value.length <= 20 &&
@@ -44,7 +45,7 @@ const UserName = ({ setPlayerName }) => {
             handleEnter();
           }
         }}
-        placeholder="Skriv inn ditt navn"
+        placeholder="Ditt Navn"
         autoFocus
         autoComplete="off"
       />

@@ -1,16 +1,15 @@
 {
   "howToPlay": [
-    "Start spillet ved å velge et tema.",
-    "Du må opprette et Brukernavn/Nick før du får velge Tema",
-    "Et ord relatert til temaet vil vises på skjermen.",
-    "Skriv ordet så raskt som mulig og trykk 'Enter' eller mellomromstasten for å bekrefte.",
-    "..."
+    "Start spillet ved å oppgi et brukernavn.",
+    "Velg et tema som passer best for deg.",
+    "Når spillet starter, vil et ord relatert til valgte tema vises på skjermen.",
+    "Skriv ordet så raskt som mulig og bekreft med mellomromstasten.(SPACE)",
+    "Hvert ord du skriver gir deg en mulighet til å tjene poeng."
   ],
-  "rules": [
-    "Du har 2 minutter til å skrive så mange ord som mulig.",
-    "Feil bokstav vil trekke poeng fra din totale score.",
-    "1 Poeng pr riktige tastetrykk",
-    "Riktig ord gir 10 poeng",
-    "3 Riktige ord på rad gir bonus på 50 poeng"
+  "scoring": [
+    "For hvert riktig tastetrykk får du 1 poeng.",
+    "Fullfører du et ord korrekt, tjener du 10 ekstra poeng.",
+    "Skriver du tre ord på rad uten feil, får du en bonus på 50 poeng.",
+    "Vær oppmerksom! Feil bokstav vil trekke poeng fra din totale score."
   ]
 }

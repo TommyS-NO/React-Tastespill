@@ -3,7 +3,18 @@ import "./Game.scss";
 import ScoreSystem from "./GameComponents/ScoreSystem";
 import Highscore from "../../components/Highscore/Highscore";
 
+import { themes } from "../../themeConfig";
+
 const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
+  const themeToClassMap = {
+    OktoberFest: "bg-OktoberFest",
+    Autum: "bg-Autum",
+    Halloween: "bg-Halloween",
+    BCAM: "bg-BCAM",
+  };
+
+  const selectedThemeClass = themeToClassMap[theme] || "";
+
   // 1. State-definisjoner
   const [inputValue, setInputValue] = useState("");
   const [wordList, setWordList] = useState([]);
@@ -18,6 +29,12 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
   const [blinkTimer, setBlinkTimer] = useState(false);
   const [pulseTimer, setPulseTimer] = useState(false);
 
+  const selectedTheme = themes[theme] || {};
+
+  const gameBackgroundStyle = {
+    backgroundImage: `url(${selectedTheme.backgroundImage})`,
+    color: selectedTheme.textColor,
+  };
   // 2. Fetch-relaterte funksjoner
   const fetchRandomWord = useCallback(() => {
     if (bufferedWordList.length === 0) {
@@ -182,7 +199,10 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
   }, [gameStatus, playerName, totalScore]);
 
   return (
-    <div className="game-box">
+    <div
+      className={`game-box ${selectedThemeClass}`}
+      style={gameBackgroundStyle}
+    >
       <div className="top-bar">
         <button
           className="close-button"
@@ -251,8 +271,10 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
             playerName={playerName}
             userRank={userRank}
           />
-          <button onClick={restartGame}>Spill igjen med samme tema</button>
-          <button onClick={onGameEnd}>Velg nytt tema</button>
+          <div className="highscore-btn-end-game-container">
+            <button onClick={restartGame}>Spill igjen med samme tema</button>
+            <button onClick={onGameEnd}>Velg nytt tema</button>
+          </div>
         </Fragment>
       )}
     </div>

@@ -2,11 +2,19 @@
 @import "../../mixins.scss";
 
 .main-content {
-  padding: 80px 20px;
+  padding-top: 50px;
   text-align: center;
-  flex: 1;
+  height: calc(100vh - 50vh);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-
+.main-content p {
+  color: black;
+  font-weight: bold;
+  background-color: rgba(226, 226, 226, 0.7);
+}
 .overlay {
   position: fixed;
   top: 0;

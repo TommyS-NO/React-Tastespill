@@ -3,14 +3,25 @@
 
 body,
 html {
-  background-color: $background-color;
-  color: $text-color;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.bg-main {
-  background-image: url("./assets/MainBackground.png");
+body {
+  background-color: $background-color;
+  color: $text-color;
+  background-image: url("./../public/assets/MainBackground.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.bg-main {
+  height: 100%;
+  background-image: inherit;
+  background-size: inherit;
+  background-repeat: inherit;
+  background-position: inherit;
   color: $text-color;
 }
