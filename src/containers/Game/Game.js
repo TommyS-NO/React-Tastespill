@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, Fragment } from "react";
-import "./game_style.css";
+import "./Game.scss";
 import ScoreSystem from "./GameComponents/ScoreSystem";
 import Highscore from "../../components/Highscore/Highscore";
 
@@ -17,39 +17,29 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
   const [blinkTimer, setBlinkTimer] = useState(false);
   const [pulseTimer, setPulseTimer] = useState(false);
 
-  const restartGame = () => {
-    setInputValue("");
-    setCurrentWord("");
-    setCountdown(3);
-    setTimer(120);
-    setGameStatus("notStarted");
-    setConsecutiveCorrect(0);
-    setTotalScore(0);
-    setUserRank(null);
-    fetchRandomWord();
-  };
-  const exitGame = () => {
-    updateHighScores({ name: playerName, score: totalScore });
-    const updatedHighScores =
-      JSON.parse(localStorage.getItem("highScores")) || [];
-    const playerIndex = updatedHighScores.findIndex(
-      (scoreData) =>
-        scoreData.name === playerName && scoreData.score === totalScore
-    );
-
-    if (playerIndex !== -1) {
-      setUserRank(playerIndex + 1);
-    } else {
-      setUserRank(null);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(`/data/${theme}.json`);
+        if (!response.ok) {
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
+        }
+        const data = await response.json();
+        setWordList(data.ord);
+        setBufferedWordList(data.ord);
+      } catch (error) {
+        console.error("Error fetching the word list:", error);
+      }
     }
-    setGameStatus("gameOver");
-  };
+    fetchData();
+  }, [theme]);
 
   const fetchRandomWord = useCallback(() => {
     if (bufferedWordList.length === 0) {
-      setBufferedWordList([...wordList]); // Fyll opp bufferen igjen hvis den er tom
+      setBufferedWordList([...wordList]);
     }
-
     const randomIndex = Math.floor(Math.random() * bufferedWordList.length);
     const selectedWord = bufferedWordList[randomIndex];
     setCurrentWord(selectedWord);
@@ -79,19 +69,15 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
       "Fantastisk! Du er på 2. plass!",
       "Bra jobbet! Du er på 3. plass!",
     ];
-
-    if (rank <= 3) {
-      return rankMessages[rank - 1];
-    } else if (rank) {
-      return `Du er på ${rank}. plass!`;
-    } else {
-      return "Dessverre nådde du ikke opp til topplisten denne gangen.";
-    }
+    return rank <= 3
+      ? rankMessages[rank - 1]
+      : rank
+      ? `Du er på ${rank}. plass!`
+      : "Dessverre nådde du ikke opp til topplisten denne gangen.";
   };
 
   const updateHighScores = (score) => {
-    let currentScores = JSON.parse(localStorage.getItem("highScores")) || [];
-
+    const currentScores = JSON.parse(localStorage.getItem("highScores")) || [];
     const existingPlayerIndex = currentScores.findIndex(
       (scoreEntry) => scoreEntry.name === score.name
     );
@@ -102,8 +88,8 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
     ) {
       currentScores.splice(existingPlayerIndex, 1);
     }
-
     currentScores.push(score);
+
     const updatedScores = currentScores
       .sort((a, b) => b.score - a.score)
       .slice(0, 10);
@@ -111,62 +97,55 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
     localStorage.setItem("highScores", JSON.stringify(updatedScores));
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(`/data/${theme}.json`);
-        if (!response.ok) {
-          throw new Error(
-            `Network response was not ok: ${response.statusText}`
-          );
-        }
-        const data = await response.json();
-        setWordList(data.ord);
-        setBufferedWordList(data.ord);
-      } catch (error) {
-        console.error("Error fetching the word list:", error);
-      }
-    }
-    fetchData();
-  }, [theme]);
+  const restartGame = () => {
+    setInputValue("");
+    setCurrentWord("");
+    setCountdown(3);
+    setTimer(120);
+    setGameStatus("notStarted");
+    setConsecutiveCorrect(0);
+    setTotalScore(0);
+    setUserRank(null);
+    fetchRandomWord();
+  };
+
+  const exitGame = () => {
+    updateHighScores({ name: playerName, score: totalScore });
+    const updatedHighScores =
+      JSON.parse(localStorage.getItem("highScores")) || [];
+    const playerIndex = updatedHighScores.findIndex(
+      (scoreData) =>
+        scoreData.name === playerName && scoreData.score === totalScore
+    );
+    setUserRank(playerIndex !== -1 ? playerIndex + 1 : null);
+    setGameStatus("gameOver");
+  };
 
   useEffect(() => {
     if (gameStatus === "notStarted" && countdown > 0) {
-      const timerId = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
+      const timerId = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timerId);
     } else if (countdown === 0 && gameStatus === "notStarted") {
       setGameStatus("inProgress");
       fetchRandomWord();
-
-      setTimeout(() => {
-        const timerId = setInterval(() => {
-          setTimer((prevTime) => {
-            if (prevTime <= 1) {
-              setGameStatus("gameOver");
-              clearInterval(timerId);
-              return 0;
-            }
-            return prevTime - 1;
-          });
-        }, 1000);
-        return () => clearInterval(timerId);
-      }, 500);
+      const timerId = setInterval(() => {
+        setTimer((prevTime) => {
+          if (prevTime <= 1) {
+            setGameStatus("gameOver");
+            clearInterval(timerId);
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timerId);
     }
   }, [countdown, fetchRandomWord, gameStatus]);
 
   useEffect(() => {
-    if (timer === 30 || timer === 60 || timer === 90) {
-      setBlinkTimer(true);
-    } else {
-      setBlinkTimer(false);
-    }
-    if (timer <= 10) {
-      setPulseTimer(true);
-    } else {
-      setPulseTimer(false);
-    }
+    const shouldBlink = [30, 60, 90].includes(timer);
+    setBlinkTimer(shouldBlink);
+    setPulseTimer(timer <= 10);
   }, [timer]);
 
   useEffect(() => {
@@ -174,17 +153,11 @@ const Game = ({ theme, playerName, onGameEnd, backToMain }) => {
       updateHighScores({ name: playerName, score: totalScore });
       const updatedHighScores =
         JSON.parse(localStorage.getItem("highScores")) || [];
-
       const playerIndex = updatedHighScores.findIndex(
         (scoreData) =>
           scoreData.name === playerName && scoreData.score === totalScore
       );
-
-      if (playerIndex !== -1) {
-        setUserRank(playerIndex + 1);
-      } else {
-        setUserRank(null);
-      }
+      setUserRank(playerIndex !== -1 ? playerIndex + 1 : null);
     }
   }, [gameStatus, playerName, totalScore]);
 
