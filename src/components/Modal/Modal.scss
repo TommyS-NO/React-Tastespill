@@ -138,6 +138,7 @@ input[type="text"] {
     font-size: 1.6rem;
   }
   .highscore-table {
+    background-color: rgba(0, 0, 0, 0.7);
     color: $text-color;
     font-size: 1rem;
     font-weight: bold;
@@ -172,7 +173,8 @@ input[type="text"] {
     color: black;
   }
   .highscore-table {
-    color: rgb(49, 23, 196);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: $text-color;
     font-size: 1rem;
     font-weight: bold;
   }

@@ -11,9 +11,9 @@
   align-items: center;
 }
 .main-content p {
-  color: black;
+  color: $text-color;
   font-weight: bold;
-  background-color: rgba(226, 226, 226, 0.7);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 .overlay {
   position: fixed;
